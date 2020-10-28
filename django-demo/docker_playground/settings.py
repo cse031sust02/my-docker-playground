@@ -113,7 +113,6 @@ STATIC_URL = '/static/'
 # https://docs.celeryproject.org/en/stable/django/first-steps-with-django.html
 
 CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL'],
-# CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_TIMEZONE = "Asia/Dhaka"
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
