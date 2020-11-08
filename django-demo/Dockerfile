@@ -25,5 +25,11 @@ RUN pipenv install --system
 # copy all files and directories from <src> to <dest>
 COPY . .
 
+# expose the port
+EXPOSE 8000
+
+# Command to run
+ENTRYPOINT ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
 
 

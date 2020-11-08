@@ -112,8 +112,8 @@ STATIC_URL = '/static/'
 # Celery Configurations
 # https://docs.celeryproject.org/en/stable/django/first-steps-with-django.html
 
-CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL'],
-CELERY_TIMEZONE = "Asia/Dhaka"
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TASK_SERIALIZER = 'json'
+# CELERY_BROKER_URL = 'redis://LOCALH',
+# CELERY_TIMEZONE = "Asia/Dhaka"
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TASK_SERIALIZER = 'json'

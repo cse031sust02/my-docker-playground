@@ -1,28 +1,52 @@
-version: '3.8'
+version: '3'
+
 services:
+  # Database container
+  db:
+    # official postgres image
+    image: postgres:13.0
+    # environment variables for postgres
+    environment:
+      - POSTGRES_DB=blog
+      - POSTGRES_USER=blog_user
+      - POSTGRES_PASSWORD=1234
+    # volume to preserve database data
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
 
-  app:
-    build: .
+  # Server container
+  server:
+    # use Dockerfile in this directory to build image
+    build: ./server
+    # name of the the container
+    container_name: server
+    # volume for the container
+    volumes:
+      - ./backend:/home/blog/backend??
+    # environment variables for django application
+    environment:
+      - SECRET_KEY=django_secret_key
+    # set working directory
+    working_dir: /home/my-django-project/backend
+    # command to run on start up
     command: python manage.py runserver 0.0.0.0:8000
-    environment:
-      - CELERY_BROKER_URL=amqp://user:password@broker:5672
-    ports:
-      - "8000:8000"
+    # connect to the postgres container
     depends_on:
-      - broker
+      - postgres
+    links:
+      - postgres
 
-  worker:
-    build: .
-    command: celery -A docker_playground worker -B -l debug
-    environment:
-      - CELERY_BROKER_URL=amqp://user:password@broker:5672
-    depends_on:
-      - broker
 
-  broker:
-    image: rabbitmq:3
-    environment:
-      - RABBITMQ_DEFAULT_USER=user
-      - RABBITMQ_DEFAULT_PASS=password
-    ports:
-      - 5672:5672
+  # Client container
+  # client:
+  #   build: ./frontend
+  #   volumes:
+  #     - ./frontend:/home/blog/frontend
+  #   container_name: frontend
+  #   working_dir: /home/blog/frontend
+  #   container_name: frontend
+  #   # Links to the backend so that nginx could pass certain
+  #   # urls(like /media or /feed/rss) to the backend
+  #   links:
+  #     - backend
+      
