@@ -1,4 +1,4 @@
-## 🎨 WordPress, MySQL and phpMyAdmin in Docker
+## WordPress, MySQL and phpMyAdmin in Docker
 
 ## Setup
 - Create a new directory for your project
