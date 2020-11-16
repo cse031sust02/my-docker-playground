@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+
+  # Database container
+  db:
+    # official postgres image
+    image: postgres:13.0
+    # name of the the container
+    container_name: postgres-container
+    # environment variables for postgres
+    environment:
+      - POSTGRES_DB=django_demo
+      - POSTGRES_USER=django_user
+      - POSTGRES_PASSWORD=1234
+    # volume to preserve database data
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+  # Server container (Django)
+  server:
+    # use Dockerfile in this directory to build image
+    build: .
+    # name of the the container
+    container_name: django-container
+    # environment variables for django application
+    environment:
+      - SECRET_KEY=some-secret-key
+      - DATABASES_ENGINE=django.db.backends.postgresql
+      - DATABASES_PASSWORD=1234
+      - DATABASES_USER=django_user
+      # DATABASES_HOST is set to 'db', because this is the service name of our database.
+      # Internally docker-compose will create a network and attach containers to it.
+      - DATABASES_HOST=db
+      - DATABASES_PORT=5432
+    # port mapping
+    ports:
+      - "8000:8000"
+    # command to run on start up
+    command: python manage.py runserver 0.0.0.0:8000
+    # connect to the postgres container
+    depends_on:
+      - db
+    links:
+      - db

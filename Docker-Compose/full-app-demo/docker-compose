@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+
+  app:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - CELERY_BROKER_URL=amqp://user:password@broker:5672
+    ports:
+      - "8000:8000"
+    depends_on:
+      - broker
+
+  worker:
+    build: .
+    command: celery -A docker_playground worker -B -l debug
+    environment:
+      - CELERY_BROKER_URL=amqp://user:password@broker:5672
+    depends_on:
+      - broker
+
+  broker:
+    image: rabbitmq:3
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+    ports:
+      - 5672:5672

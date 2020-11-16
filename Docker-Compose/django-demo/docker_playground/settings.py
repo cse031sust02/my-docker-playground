@@ -9,12 +9,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'q4*a1vv6xls9b!&x6_i=9f$gze0an8)tfm(kwuidhdv*u0s0z$'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -64,9 +64,13 @@ WSGI_APPLICATION = 'docker_playground.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE': os.getenv("DATABASES_ENGINE"),
+        'NAME': os.getenv("DATABASES_NAME"),
+        'USER': os.getenv("DATABASES_USER"),
+        'PASSWORD': os.getenv("DATABASES_PASSWORD"),
+        'HOST': os.getenv("DATABASES_HOST"),
+        'PORT': os.getenv("DATABASES_PORT"),
+    },
 }
 
 
@@ -107,13 +111,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
-
-# Celery Configurations
-# https://docs.celeryproject.org/en/stable/django/first-steps-with-django.html
-
-# CELERY_BROKER_URL = 'redis://LOCALH',
-# CELERY_TIMEZONE = "Asia/Dhaka"
-# CELERY_ACCEPT_CONTENT = ['application/json']
-# CELERY_RESULT_SERIALIZER = 'json'
-# CELERY_TASK_SERIALIZER = 'json'
